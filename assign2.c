@@ -62,8 +62,7 @@ struct salesman
 struct stocks
 {
         int n;
-	int keys[c];
-	//Car_Details car[c];
+        Car_Details car[c];
 	struct stocks *node[c+1];
 	struct stocks *parent;
 };
