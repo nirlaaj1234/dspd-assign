@@ -70,6 +70,9 @@ struct stocks
 void preOrder(struct stocks *);
 struct customer *insert_customer(int,struct customer * ,char *, char *,char *, float);
 
+
+struct stocks *search_car(int ,struct stocks *);
+
 struct salesman *search_salesman(int key,struct salesman *man)
 {
 	if(man!=NULL)
@@ -86,23 +89,7 @@ struct salesman *search_salesman(int key,struct salesman *man)
 	return man;
 
 }
-struct stocks *search_car(int key,struct stocks *cars)
-{
-	if(cars!=NULL)
-	{
-		printf("%d ",cars->car.VIN);
-		if(key > cars->car.VIN)
-		{
-			cars=search_car(key,cars->right);
-		}
-		else if (key < cars->car.VIN)
-		{
-			cars=search_car(key,cars->left);
-		}
-	}
-	return cars;
 
-}
 
 struct showroom sell(int k,struct salesman *sales,struct stocks *car)
 {
@@ -111,37 +98,53 @@ struct showroom sell(int k,struct salesman *sales,struct stocks *car)
 	struct stocks *temp_car;
 	temp_car=car;
 	man=sales;
+
+	//printf("%d %d \n",car->height,car->car.VIN );
+	//printf("%d %d \n",temp_car->height,temp_car->car.VIN );
+	                       
+	struct showroom s;
 	while(flag==1)
 	{
 		man=search_salesman(k,man);
+	//	printf("%d %d\n",temp_car->height,temp_car->car.VIN );
+	                       
+	//	printf("%d\n",man->height );
 		if(man==NULL)
 			printf("Wrong Id Entered\n");
 		else
 		{
+			temp_car=car;
+		//	printf("%d %d\n",temp_car->height,temp_car->car.VIN );
+	                       
 			preOrder(temp_car);
+			//printf("%d %d\n",temp_car->height,temp_car->car.VIN );
+	                       
 			printf("Enter the VIN number of the car u want to buy\n");
 			int temp_vin;
 			scanf("%d",&temp_vin);
-			printf("%d\n",temp_car->car.VIN );
+			//printf("%d %d\n",temp_car->height,temp_car->car.VIN );
+	                       
 			temp_car=search_car(temp_vin,temp_car);
+			//printf("%d %d\n",temp_car->height,temp_car->car.VIN );
 			if(temp_car==NULL)
 			{
-				printf("Wrong VIN number is Entered\n" );
+				printf("Car is not available with this VIN number\n" );
 			}
 			else
 			{
-				if(temp_car->car.status==1)
-				{
+				printf("Found the car\n");
 					char name[30],Mob[10],address[50];
-					int choice,loan_option,monthly_payment;
+					int choice,loan_option;
+					float monthly_payment;
 					printf("The car is available pls Enter the following for billing\n");
 					printf("Enter Your Name:");
-					gets(name);
-					printf("\nEnter your Mob number without any code or 0:" );
-					gets(Mob);
+					scanf("%s",name);
+
+					printf("Enter your Mob number without any code or 0:" );
+					scanf("%s",Mob);
 					printf("\nEnter your Address:");
-					gets(address);
-					printf("\nNow choose any your payment option \n1.Full Payment 2.Loan");
+					scanf("%s",address);
+					printf("Now choose any your payment option \n1.Full Payment 2.Loan\n");
 					scanf("%d",&choice);
 					if(choice==1)
 					{
@@ -166,6 +169,7 @@ struct showroom sell(int k,struct salesman *sales,struct stocks *car)
 						{
 							monthly_payment=(float)((temp_car->car.price/36)+(temp_car->car.price*(0.085)));
 						}
+						printf("%f\n",monthly_payment);
 						man->man.customer_list=insert_customer(temp_vin,man->man.customer_list,name,Mob,address,monthly_payment);
 					}
 					if (man->man.customer_list!=NULL)
@@ -173,9 +177,13 @@ struct showroom sell(int k,struct salesman *sales,struct stocks *car)
 						temp_car->car.status=0;
 						printf("\nData is successfully updated and the car is yours now\n");
 						flag=0;
+						man->man.num_of_cars_sold++;
+						man->man.sales_achieved=temp_car->car.price;
 					}
-				}
 			}
 		}
-	}	
+	}
+	s.stock_details=car;
+	s.man=sales;	
+	return s;
 }

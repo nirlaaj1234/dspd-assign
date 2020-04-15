@@ -83,6 +83,16 @@ struct stocks* newNode(int key,char name[] ,char colour[] ,long int price , char
     scanf("%s%s%li%d%s%d",node->car.car_name,node->car.color,&(node->car.price),&fuel,node->car.type,&(node->car.avail_cars)); 
     node->left   = NULL; 
     node->right  = NULL;
+    struct stocks *temp_car;
+    temp_car=car;
+    man=sales;
+    while(flag==1)
+    {
+        man=search_salesman(k,man);
+        if(man==NULL)
+            printf("Wrong Id Entered\n");
+        else
+        {
     node->car.sold_cars=0; 
     if(fuel==0){
     node->car.Fuel="Petrol";
@@ -210,7 +220,7 @@ struct stocks* insert(struct stocks* node, int key ,char name[] ,char colour[] ,
   
     /* return the (unchanged) node pointer */
     return node; 
-}; 
+} 
 void preOrder(struct stocks *root) 
 { 
     if(root != NULL) 
@@ -229,6 +239,28 @@ void preOrder(struct stocks *root)
         preOrder(root->right);   
     } 
 } 
+
+struct stocks *search_car(int key,struct stocks *cars)
+{
+    if(cars!=NULL)
+    {
+        //printf("%d \t",cars->car.VIN);
+        //printf("%d",key);
+        if(key > cars->car.VIN)
+        {
+            cars=search_car(key,cars->right);
+        }
+        else if (key < cars->car.VIN)
+        {
+            cars=search_car(key,cars->left);
+        }
+    }
+    if(cars!=NULL && cars->car.status==1)
+    return cars;
+    else 
+        return NULL;
+
+}
 
 struct showroom CreateStockTree1(struct stocks *root,struct salesman *root1)
 {

@@ -95,7 +95,7 @@ int main()
         s[1].man=NULL;        
         s[2].stock_details=NULL;
         s[2].man=NULL;
-	printf("Creation of B tree for node %d\n",c);
+	printf("Creation of B tree\n");
 	flag1=1;
 	s[0]=CreateStockTree1(s[0].stock_details,s[0].man);
 	s[1]=CreateStockTree2(s[1].stock_details,s[1].man);
@@ -165,6 +165,7 @@ int main()
 	                        printf("\n");
 	                        printf("Enter the id of salesman from which u want to buy the car : ");
 	                        scanf("%d",&key);
+	                        //printf("%d %d\n",s[choice1-1].stock_details->height,s[choice1-1].stock_details->car.VIN );
 	                        s[choice1-1]=sell(key,s[choice1-1].man,s[choice1-1].stock_details);
 	                        break;
 	                        
